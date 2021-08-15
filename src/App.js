@@ -1,25 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { gql, useQuery } from '@apollo/client'
+import LoginForm from './components/login/LoginForm'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const ALL_USERS = gql`
+  query Query {
+    allUsers {
+      username
+    }
+  }
+`
+
+const App = () => {
+  const { loading } = useQuery(ALL_USERS)
+
+  if (loading) {
+    return <div>loading...</div>
+  }
+
+  return <LoginForm />
 }
 
-export default App;
+export default App
