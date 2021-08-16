@@ -1,31 +1,53 @@
 import React from 'react'
-import TextInput from '../shared/TextInput'
 
 import * as Yup from 'yup'
 import { Formik } from 'formik'
-import { Button, Input } from '@material-ui/core'
+import { Box, Button, Input } from '@material-ui/core'
+import FormField from '../shared/FormField'
+import useLogin from '../../hooks/useLogin'
 
 const LoginForm = () => {
+  const [login, result] = useLogin()
+  console.log(login)
   const validationSchema = Yup.object().shape({
-    email: Yup.string().email('Email not valid').required('Email is required'),
-    password: Yup.string().required('Password is required'),
+    Username: Yup.string().required(),
+    Password: Yup.string().required(),
   })
+  console.log(result)
   return (
     <>
       <Formik
-        initialValues={{ username: '', password: '' }}
+        initialValues={{ Username: '', Password: '' }}
         validationSchema={validationSchema}
-        onSubmit={(values) => console.log(values)}
+        onSubmit={(values) =>
+          login({
+            variables: {
+              loginUsername: values.Username,
+              loginPassword: values.Password,
+            },
+          })
+        }
       >
         {({ submitForm }) => (
           <>
-            <TextInput name="username" label="Username">
+            <FormField name="Username" label="Username" fullWidth>
               {({ field }) => <Input {...field} id={field.name} />}
-            </TextInput>
-            <TextInput name="password" label="Password">
-              {({ field }) => <Input {...field} id={field.name} />}
-            </TextInput>
-            <Button onSubmit={submitForm}>Save</Button>
+            </FormField>
+            <Box mb={2} />
+            <FormField name="Password" label="Password" fullWidth>
+              {({ field }) => (
+                <Input {...field} id={field.name} type="password" />
+              )}
+            </FormField>
+            <Box mb={2} />
+            <Button
+              onClick={submitForm}
+              color="primary"
+              variant="contained"
+              fullWidth
+            >
+              Log in
+            </Button>
           </>
         )}
       </Formik>

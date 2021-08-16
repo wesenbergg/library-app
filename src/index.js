@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
+import './index.css'
 
 import {
   ApolloClient,
@@ -8,6 +9,12 @@ import {
   HttpLink,
   InMemoryCache,
 } from '@apollo/client'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
+import { Router } from 'react-router-dom'
+import history from './utils/history'
+
+const queryClient = new QueryClient()
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
@@ -17,8 +24,13 @@ const client = new ApolloClient({
 })
 
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <App />
-  </ApolloProvider>,
+  <QueryClientProvider client={queryClient}>
+    <ApolloProvider client={client}>
+      <Router history={history}>
+        <App />
+      </Router>
+    </ApolloProvider>{' '}
+    <ReactQueryDevtools initialIsOpen={false} />
+  </QueryClientProvider>,
   document.getElementById('root')
 )
