@@ -7,13 +7,13 @@ import FormField from '../shared/FormField'
 import useLogin from '../../hooks/useLogin'
 
 const LoginForm = () => {
-  const [login, result] = useLogin()
-  console.log(login)
+  const [login] = useLogin()
+
   const validationSchema = Yup.object().shape({
     Username: Yup.string().required(),
     Password: Yup.string().required(),
   })
-  console.log(result)
+
   return (
     <>
       <Formik
