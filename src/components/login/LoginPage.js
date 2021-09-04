@@ -28,7 +28,7 @@ const useStyles = makeStyles({
   },
 })
 
-const LoginPage = ({}) => {
+const LoginPage = () => {
   const styles = useStyles()
   return (
     <div style={{ width: '100%', height: '100vh' }}>
