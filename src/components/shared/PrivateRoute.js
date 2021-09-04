@@ -1,8 +1,9 @@
-import React from 'react'
-import { Route, Redirect } from 'react-router-dom'
-import PropTypes from 'prop-types'
-import PrivateNavigation from './PrivateNavigation'
-import useFetchUser from '../../hooks/useFetchUser'
+import React from "react";
+import { Route, Redirect } from "react-router-dom";
+import PropTypes from "prop-types";
+import PrivateNavigation from "./PrivateNavigation";
+import CircularLoadingPage from "./CircularLoadingPage";
+import useFetchLoggedUser from "../../hooks/useFetchLoggedUser";
 
 /**
  * Private route component. Renders the child components if the user is logged in
@@ -17,34 +18,39 @@ import useFetchUser from '../../hooks/useFetchUser'
  * @param {string} [props.role] Required if private route is role specific. User's current role.
  * @param {("worker"|"business"|"agency")} [props.roles] Required if private route is role specific.
  */
-const PrivateRoute = ({ loggedIn = true, children, ...rest }) => {
-  const { data: user } = useFetchUser()
-  console.log(user)
+const PrivateRoute = ({ children, ...rest }) => {
+  const { data: user, loading } = useFetchLoggedUser();
+
+  console.log(loading);
+  console.log(user);
   return (
     <Route
       {...rest}
       render={({ location }) => {
-        if (!loggedIn) {
+        if (loading) {
+          return <CircularLoadingPage />;
+        }
+        if (!user) {
           return (
             <Redirect
               to={{
-                pathname: '/',
+                pathname: "/",
                 state: { from: location },
               }}
             />
-          )
+          );
         }
 
-        return <PrivateNavigation>{children}</PrivateNavigation>
+        return <PrivateNavigation>{children}</PrivateNavigation>;
       }}
     />
-  )
-}
+  );
+};
 
 PrivateRoute.propTypes = {
   loggedIn: PropTypes.bool,
   path: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
-}
+};
 
-export default PrivateRoute
+export default PrivateRoute;

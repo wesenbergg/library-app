@@ -15,15 +15,16 @@ import history from "./utils/history";
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("bookzillaUser");
   // return the headers to the context so httpLink can read them
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : "",
+      authorization: token ? token : "",
     },
   };
 });
+
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: authLink.concat(

@@ -2,7 +2,7 @@ import React from "react";
 import LoginPage from "./components/login/LoginPage";
 import { Redirect, Route, Switch } from "react-router-dom";
 import HomePage from "./components/home/HomePage";
-import PrivateRoute from './components/shared/PrivateRoute'
+import PrivateRoute from "./components/shared/PrivateRoute";
 
 const App = () => {
   return (

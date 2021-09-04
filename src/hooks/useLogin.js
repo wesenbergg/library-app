@@ -1,4 +1,6 @@
-import { gql, useMutation } from '@apollo/client'
+import { gql, useMutation, useQuery } from "@apollo/client";
+import { useHistory } from "react-router";
+import { WHOAMI } from "./useFetchLoggedUser";
 
 const LOGIN = gql`
   mutation Mutation($loginUsername: String!, $loginPassword: String!) {
@@ -6,16 +8,23 @@ const LOGIN = gql`
       value
     }
   }
-`
+`;
 
 export default function useLogin() {
+  const history = useHistory();
+
+  const { refetch } = useQuery(WHOAMI, {
+    notifyOnNetworkStatusChange: true,
+  });
+
   return useMutation(LOGIN, {
     onError: (error) => {
-      console.log('error ', error)
+      console.log("error ", error);
     },
     onCompleted: ({ login }) => {
-      console.log('onCompleted, ', login.value)
-      localStorage.setItem('bookzillaUser', `bearer ${login.value}`)
+      localStorage.setItem("bookzillaUser", `bearer ${login.value}`);
+      refetch();
+      history.push("/home");
     },
-  })
+  });
 }
