@@ -147,7 +147,7 @@ const PrivateNavigation = ({ children }) => {
         </div>
         <Divider />
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+          {["Haku", "Tarjoukset", "Ihmiset", "Profiili"].map((text, index) => (
             <ListItem button key={text}>
               <ListItemIcon>
                 {index % 2 === 0 ? <Inbox /> : <Mail />}
